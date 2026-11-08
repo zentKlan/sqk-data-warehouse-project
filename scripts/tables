@@ -1,8 +1,8 @@
 /* 
 CREATION OF TABLE
-  Code destiny: to create tables in wich will be fit and held data from csv file
+  Code destiny: to create tables in wich will be fit and held data from csv files
 
-	WARNING Launch of the code will delete all the data inside the existing tables
+	WARNING Launch of the code will delete all the data inside the existing tables and fill in the data from CSV files again
 */
 IF OBJECT_ID ('bronze.crm_cust_info', 'U') IS NOT NULL 
 	DROP TABLE bronze.crm_cust_info 
@@ -36,27 +36,84 @@ IF OBJECT_ID ('bronze.erp_loc_az12', 'U') IS NOT NULL
 	DROP TABLE bronze.erp_loc_az12
 CREATE TABLE bronze.erp_loc_az12 ( cid NVARCHAR(50), bdate DATE, gen NVARCHAR(50)); GO
 
-IF OBJECT_ID ('bronze.erp.loc_a101', 'U') IS NOT NULL 
-	DROP TABLE bronze.erp.loc_a101 
+IF OBJECT_ID ('bronze.erp_loc_a101', 'U') IS NOT NULL 
+	DROP TABLE bronze.erp_loc_a101 
 CREATE TABLE bronze.erp.loc_a101 (cid NVARCHAR(50), cntry NVARCHAR(50));
+GO
+
+TRUNCATE TABLE bronze.crm_prd_info
+BULK INSERT bronze.crm_prd_info FROM '/var/opt/mssql/datasets/erp/prd_info.csv' 
+WITH 
+(
+FIRSTROW = 2,
+FIELDTERMINATOR = ',', 
+TABLOCK
+);
+GO
+SELECT * FROM bronze.crm_prd_info
 
 
 
+TRUNCATE TABLE bronze.crm_sales_details
+BULK INSERT bronze.crm_sales_details FROM '/var/opt/mssql/datasets/erp/sales_details.csv' 
+WITH 
+(
+FIRSTROW = 2,
+FIELDTERMINATOR = ',', 
+TABLOCK
+);
+GO
+SELECT * FROM bronze.crm_sales_details
+
+
+TRUNCATE TABLE bronze.erp_loc_az12
+BULK INSERT bronze.erp_loc_az12 FROM '/var/opt/mssql/datasets/erp/CUST_AZ12.csv' 
+WITH 
+(
+FIRSTROW = 2,
+FIELDTERMINATOR = ',', 
+TABLOCK
+);
+GO
+SELECT * FROM bronze.erp_loc_az12 
 
 
 
+TRUNCATE TABLE bronze.crm_cust_info
+BULK INSERT bronze.crm_cust_info FROM '/var/opt/mssql/datasets/erp/cust_info.csv' 
+WITH 
+(
+FIRSTROW = 2,
+FIELDTERMINATOR = ',', 
+TABLOCK
+);
+GO
+SELECT * FROM bronze.crm_cust_info
 
 
 
+TRUNCATE TABLE bronze.erp_px_cat_giv2
+BULK INSERT bronze.erp_px_cat_giv2 FROM '/var/opt/mssql/datasets/erp/PX_CAT_GIV2.csv' 
+WITH 
+(
+FIRSTROW = 2,
+FIELDTERMINATOR = ',', 
+TABLOCK
+);
+GO
+SELECT * FROM bronze.erp_px_cat_giv2
 
 
 
-
-
-
-
-
-
-
+TRUNCATE TABLE bronze.erp_loc_a101
+BULK INSERT bronze.erp_loc_a101 FROM '/var/opt/mssql/datasets/erp/LOC_A101.csv' 
+WITH 
+(
+FIRSTROW = 2,
+FIELDTERMINATOR = ',', 
+TABLOCK
+);
+GO
+SELECT * FROM bronze.erp_loc_a101
 
 
