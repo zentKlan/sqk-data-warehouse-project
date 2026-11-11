@@ -5,7 +5,8 @@
 	WARNING execution of this script also removes all the data from tables and fills in again, any data that was not fitted in tables from this script is going to be deleted
 */
 
-
+CREATE OR ALTER PROCEDURE silver.load_silver AS
+BEGIN
 IF OBJECT_ID ('silver.crm_cust_info', 'U') IS NOT NULL 
 	DROP TABLE silver.crm_cust_info 
 CREATE TABLE silver.crm_cust_info
@@ -105,8 +106,6 @@ CASE
     ELSE 'n/a'
 END AS gen
 FROM bronze.erp_loc_az12 ela
-
-
 INSERT INTO silver.erp_loc_a101 (cid, cntry)
 SELECT REPLACE(cid, '-', '') cid, 
 CASE 
@@ -119,8 +118,10 @@ CASE
     ELSE 'n/a'
 END AS cntry
 FROM bronze.erp_loc_a101 ela
-
-
 INSERT INTO silver.erp_px_cat_g1v2 (id, cat, subcat, maintenance)
 SELECT DISTINCT id, cat, subcat, maintenance FROM bronze.erp_px_cat_g1v2
+END
 
+
+
+EXEC silver.load_silver
